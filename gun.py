@@ -40,6 +40,9 @@ class gun(sloppen.obj):
                         self.sprite = self.sprite_gun_shoot
                         self.x_offset = 20
                         self.game.map.current_map.add_object(bullet((self.x + 64) + (32 * self.target.direction), self.y + 64, self.target.direction, self.game), self.pos)
+                        for i in self.game.map.current_map.map_objects:
+                            if i.name == "camera":
+                                i.shake(10, 3)
 
                 #decrease the x offset
                 if self.x_offset > 0:
@@ -72,7 +75,7 @@ class bullet(sloppen.obj):
 
     def instance_code(self):
         if self.frozen != True:
-            self.x += self.direction * 15
+            self.x += self.direction * 50
 
             self.update_collision()
 

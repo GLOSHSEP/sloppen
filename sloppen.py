@@ -483,6 +483,9 @@ class viewport:
                 i[1] -= x
                 i[2] -= y
 
+    def scale_non_gui(self, width, height):
+        pass
+
     def scale(self, width, height):
         self.scale_amount = [width, height]
 
