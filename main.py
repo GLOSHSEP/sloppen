@@ -19,7 +19,7 @@ except:
 
 import sloppen
 
-game = sloppen.game_data("Game Collection", 60, (1280, 720))
+game = sloppen.game_data("Get David", 60, (1280, 720))
 game.initalize()
 game.map.create_map_file("menu/menu.map")
 game.map.create_map_file("level/level_1/level_1.map")
