@@ -20,7 +20,6 @@ import sloppen
 
 game = sloppen.game_data("Game Collection", 60, (1280, 720))
 game.initalize()
-game.screen.add_viewport(1)
 game.map.create_map_file("level/level_1/level_1.map")
 game.map.switch_map("level_1")
 game.game_loop()

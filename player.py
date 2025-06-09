@@ -25,6 +25,8 @@ class player(sloppen.obj):
         #walk
         self.walk_speed = 0
         self.walk_cap = 10
+        self.walk_accelerate = 1
+        self.walk_fr = 2
         #dash
         self.dash_speed = 0
         self.dashes = [100, 100, 100]
@@ -37,11 +39,25 @@ class player(sloppen.obj):
         self.wall_jump_knock_back = 30
         self.wall_jumps = 3
         self.wall_jump_speed = 0
+        self.wall_mwj = 6
+        #shoot
+        self.bullet_cool_down = 20
+        self.bullet_fs = 10
+
+        #hurt
+        self.hurt_counter = 0
+
+        #status
+        self.health = 3
+        self.fr = False
+        self.fs = False
+        self.mwj = False
 
         #states
         self.state_lock = 0
         self.state_normal = 1
         self.state_dead = 2
+        self.state_hurt = 3
         self.states = self.state_normal
 
         #sprites
@@ -53,6 +69,7 @@ class player(sloppen.obj):
         self.sprite_fall = sloppen.sprite(self.name, [sprite_path + "fall/0.png", sprite_path + "fall/1.png", sprite_path + "fall/2.png"], 6, 0, self.game)
         self.sprite_dash = sloppen.sprite(self.name, [sprite_path + "dash/0.png", sprite_path + "dash/1.png", sprite_path + "dash/2.png"], 6, 0, self.game)
         self.sprite_die = sloppen.sprite(self.name, [sprite_path + "die/0.png", sprite_path + "die/1.png", sprite_path + "die/2.png", sprite_path + "die/3.png", sprite_path + "die/4.png", sprite_path + "die/5.png", sprite_path + "die/6.png"], 24, 0, self.game)
+        self.sprite_hurt = sloppen.sprite(self.name, [sprite_path + "hurt/0.png"], 0, 0, self.game)
         
         self.sprite = self.sprite_idle
 
@@ -76,6 +93,10 @@ class player(sloppen.obj):
             self.update_cords()
         elif self.states == self.state_dead:
             self.death_animation()
+        elif self.states == self.state_hurt:
+            self.do_hurt()
+            self.check_collision()
+            self.update_cords()
 
     #enable player input
     def get_input(self):
@@ -95,7 +116,10 @@ class player(sloppen.obj):
             self.direction = self.key_dir
 
         #calculate movement speed
-        self.walk_speed += 1 * self.key_dir
+        if self.fr == False:
+            self.walk_speed += self.walk_accelerate * self.key_dir
+        else:
+            self.walk_speed += self.walk_fr * self.key_dir
 
         if self.key_dir == 0:
             self.walk_speed = 0
@@ -104,14 +128,12 @@ class player(sloppen.obj):
             self.walk_speed = self.walk_cap * self.key_dir
 
         self.hsp = self.walk_speed
-        #properly implement later maybe 
-        #self.hsp += self.walk_speed
 
         #add gravity
         self.vsp += self.grv
     
         if self.game.keyboard.check_pressed("K_RSHIFT") == 1:
-            self.states = self.state_dead
+            self.states = self.state_hurt
 
     #enable dash
     def dash(self):
@@ -174,7 +196,10 @@ class player(sloppen.obj):
 
         #refresh wall jumps
         if self.grounded:
-            self.wall_jumps = 3
+            if self.mwj == False:
+                self.wall_jumps = 3
+            else:
+                self.wall_jumps = self.wall_mwj
 
     #enable hsp cap
     def cap_hsp(self):
@@ -211,6 +236,8 @@ class player(sloppen.obj):
                 self.sprite_jump.flip(True, False)
                 self.sprite_fall.flip(True, False)
                 self.sprite_dash.flip(True, False)
+                self.sprite_die.flip(True, False)
+                self.sprite_hurt.flip(True, False)
         #player is facing right
         elif self.key_right:
             if self.flipped == True:
@@ -220,6 +247,24 @@ class player(sloppen.obj):
                 self.sprite_jump.flip(True, False)
                 self.sprite_fall.flip(True, False)
                 self.sprite_dash.flip(True, False)
+                self.sprite_die.flip(True, False)
+                self.sprite_hurt.flip(True, False)
+
+    def do_hurt(self):
+        self.vsp += self.grv
+        if self.sprite != self.sprite_hurt:
+            self.shake(10, 20)
+            self.zoom(1.1)
+            self.health -= 1
+            if self.health <= 0:
+                self.states = self.state_dead
+            self.sprite = self.sprite_hurt
+            self.hsp = (self.hsp * -1) / 2
+        else:
+            self.hurt_counter += 1
+            if self.hurt_counter >= 30:
+                self.hurt_counter = 0
+                self.states = self.state_normal
 
     #enable wall collision
     def check_collision(self):
@@ -246,6 +291,21 @@ class player(sloppen.obj):
 
                 if self.colliding(self.x, self.y + 1, i.collision) == True:
                     self.grounded = True
+
+            if i.name == "power_fr":
+                if self.colliding(self.x, self.y, i.collision) == True:
+                    self.fr = True
+                    self.game.map.current_map.remove_object(i.pos)
+
+            if i.name == "power_fs":
+                if self.colliding(self.x, self.y, i.collision) == True:
+                    self.fs = True
+                    self.game.map.current_map.remove_object(i.pos)
+
+            if i.name == "power_mwj":
+                if self.colliding(self.x, self.y, i.collision) == True:
+                    self.mwj = True
+                    self.game.map.current_map.remove_object(i.pos)
     
     #enable application of horizontal speed and veritcal speed
     def update_cords(self):
@@ -264,6 +324,7 @@ class player(sloppen.obj):
         else:
             if self.sprite.frame_index == len(self.sprite.frames) - 1:
                 self.sprite.fps = 0
+                self.game.map.switch_map(self.game.map.current_map.name)
 
     def shake(self, magnitude, length):
         for i in self.game.map.current_map.map_objects:

@@ -4,6 +4,8 @@ camera
 wall
 bg
 gun
+hud
+power_ups
 @imports_end
 @args_start
 @args_end
@@ -310,8 +312,12 @@ wall.wall(4736, 3712, "level/level_1/wall/5", self.game)
 wall.wall(4864, 3712, "level/level_1/wall/5", self.game)
 wall.wall(0, 3840, "level/level_1/wall/5", self.game)
 
+power_ups.power_fs(500 + 128, 500, "level/level_1/wall/5", self.game)
+
 player.player(500, 500, self.game)
 gun.gun(500, 500, self.game)
+
+hud.hud(self.game)
 
 camera.camera(500, 500, "player", 16, self.game)
 @objects_end

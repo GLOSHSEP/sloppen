@@ -36,7 +36,10 @@ class gun(sloppen.obj):
                 #check if the player can shoot
                 if self.shoot_timer == 0:
                     if self.target.key_shoot:
-                        self.shoot_timer = 20
+                        if self.target.fs == False:
+                            self.shoot_timer = self.target.bullet_cool_down
+                        else:
+                            self.shoot_timer = self.target.fs
                         self.sprite = self.sprite_gun_shoot
                         self.x_offset = 20
                         self.game.map.current_map.add_object(bullet((self.x + 64) + (32 * self.target.direction), self.y + 64, self.target.direction, self.game), self.pos)

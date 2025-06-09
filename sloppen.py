@@ -316,6 +316,8 @@ class map_game:
 
     def run_map(self):
         for i in range(0, len(self.map_objects)):
+            if i >= len(self.map_objects):
+                return
             self.map_objects[i].update(i)
             self.map_objects[i].instance_code() 
             self.map_objects[i].instance_draw() 
@@ -451,7 +453,6 @@ class viewport:
 
     def draw(self):
         self.surface = pygame.Surface((self.resolution[0], self.resolution[1]))
-        self.surface.fill((0, 0, 0))
         for i in self.blit_array:
             self.surface.blit(i[0], (i[1] + i[3][0], i[2] + i[3][1]))
         #self.surface = self.rotate_surface(self.surface, self.rotation_angle)

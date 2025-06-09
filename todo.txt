@@ -1,0 +1,6 @@
+add enemies
+make scaling seperate for non gui and gui
+add paralax background
+menu
+you win
+more levels
