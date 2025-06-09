@@ -1,13 +1,14 @@
 """
 Marley Ardrey
-16/05/2025
-Game menu
-This program contains a rock paper scissors high low guessing and tic tac toe game implemented using pygame built on top of my home grown pygame engine "sloppen"
-you must have pygame installed to run this game
+09/06/2025
+Get David
+Get David is a game where you play as a blob named Edwin with a task to get the diabolical square David
+All instructions explained in game
+Requires pygame install via
 pip install pygame
 pip3 install pygame
-1 font from https://www.1001freefonts.com/3d-fonts.php was used
-High low guessing game background taken from earthbound
+One font from https://www.1001freefonts.com/3d-fonts.php was used
+Menu background from https://www.reddit.com/r/earthbound/comments/morrbn/i_made_a_funky_earthbound_battle_background/
 """
 
 try: 
@@ -20,7 +21,7 @@ import sloppen
 
 game = sloppen.game_data("Game Collection", 60, (1280, 720))
 game.initalize()
-game.map.create_map_file("level/menu/menu.map")
+game.map.create_map_file("menu/menu.map")
 game.map.create_map_file("level/level_1/level_1.map")
 game.map.switch_map("menu")
 game.game_loop()

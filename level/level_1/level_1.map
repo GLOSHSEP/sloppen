@@ -312,7 +312,7 @@ wall.wall(4736, 3712, "level/level_1/wall/5", self.game)
 wall.wall(4864, 3712, "level/level_1/wall/5", self.game)
 wall.wall(0, 3840, "level/level_1/wall/5", self.game)
 
-power_ups.power_fs(500 + 128, 500, "level/level_1/wall/5", self.game)
+power_ups.power_mwj(500 + 128, 500, "level/level_1/wall/5", self.game)
 
 player.player(500, 500, self.game)
 gun.gun(500, 500, self.game)

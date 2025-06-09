@@ -4,3 +4,4 @@ add paralax background
 menu
 you win
 more levels
+add sound
