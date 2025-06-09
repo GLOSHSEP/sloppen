@@ -92,6 +92,7 @@ class player(sloppen.obj):
             self.check_collision()
             self.update_cords()
         elif self.states == self.state_dead:
+            self.get_input()
             self.death_animation()
         elif self.states == self.state_hurt:
             self.do_hurt()
@@ -324,7 +325,8 @@ class player(sloppen.obj):
         else:
             if self.sprite.frame_index == len(self.sprite.frames) - 1:
                 self.sprite.fps = 0
-                self.game.map.switch_map(self.game.map.current_map.name)
+        if self.key_shoot:
+            self.game.map.switch_map(self.game.map.current_map.name)
 
     def shake(self, magnitude, length):
         for i in self.game.map.current_map.map_objects:

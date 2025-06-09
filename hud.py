@@ -14,6 +14,7 @@ class hud(sloppen.obj):
         self.sprite_fr = sloppen.sprite(self.name, [sprite_path + "fr/0.png"], 0, 0, self.game)
         self.sprite_fs = sloppen.sprite(self.name, [sprite_path + "fs/0.png"], 0, 0, self.game)
         self.sprite_mwj = sloppen.sprite(self.name, [sprite_path + "mwj/0.png"], 0, 0, self.game)
+        self.sprite_died = sloppen.sprite(self.name, [sprite_path + "died/0.png"], 0, 0, self.game)
 
     def instance_code(self):
         if self.target == None:
@@ -38,3 +39,6 @@ class hud(sloppen.obj):
                 self.sprite_fs.draw_sprite_gui(0, 0)
             if self.target.mwj == True:
                 self.sprite_mwj.draw_sprite_gui(0, 0)
+
+            if self.target.states == self.target.state_dead:
+                self.sprite_died.draw_sprite_gui(0, 0)

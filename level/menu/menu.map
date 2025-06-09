@@ -1,0 +1,13 @@
+@imports_start
+menu
+@imports_end
+@args_start
+@args_end
+@properties_start
+menu
+1280
+720
+@properties_end
+@objects_start
+menu.menu(self.game)
+@objects_end

@@ -319,7 +319,11 @@ class map_game:
             if i >= len(self.map_objects):
                 return
             self.map_objects[i].update(i)
+            if i >= len(self.map_objects):
+                return
             self.map_objects[i].instance_code() 
+            if i >= len(self.map_objects):
+                return
             self.map_objects[i].instance_draw() 
 
         for i in self.remove_buffer:
