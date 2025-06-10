@@ -307,6 +307,14 @@ class player(sloppen.obj):
                 if self.colliding(self.x, self.y, i.collision) == True:
                     self.mwj = True
                     self.game.map.current_map.remove_object(i.pos)
+
+        if self.x > self.game.map.current_map.width or self.x < 0 - self.sprite.width:
+            self.health = 0
+            self.states = self.state_dead
+
+        if self.y > self.game.map.current_map.height or self.y < 0 - self.sprite.height:
+            self.health = 0
+            self.states = self.state_dead
     
     #enable application of horizontal speed and veritcal speed
     def update_cords(self):

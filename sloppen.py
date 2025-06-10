@@ -211,7 +211,6 @@ class map_manager:
         self.game = game
         self.current_map = None
         self.all_maps = []
-
     
     def switch_map(self, new_map, destroy = True):
         for i in self.all_maps:

@@ -1,7 +1,9 @@
+add sound
 add enemies
-make scaling seperate for non gui and gui
 add paralax background
-menu
+menu drawings
 you win
 more levels
-add sound
+change camera speed
+make sure every object follows the frozen and visible rules
+make scaling seperate for non gui and gui maybe

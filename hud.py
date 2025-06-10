@@ -1,10 +1,13 @@
 import sloppen
 
 class hud(sloppen.obj):
-    def __init__(self, game):
+    def __init__(self, song, game):
         sloppen.obj.__init__(self, "hud", 0, 0, True, False, game)
 
         self.target = None
+
+        self.music = pygame.mixer.Sound(song)
+        self.music.play(-1)
 
         sprite_path = "hud/"
         self.sprite_main = sloppen.sprite(self.name, [sprite_path + "main/0.png"], 0, 0, self.game)
@@ -21,6 +24,9 @@ class hud(sloppen.obj):
             for i in self.game.map.current_map.map_objects:
                 if i.name == "player":
                     self.target = i
+        else:
+            if self.target.states = self.target.state_dead:
+                self.music.stop()
 
     def instance_draw(self):
         self.sprite_main.draw_sprite_gui(0, 0)
