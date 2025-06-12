@@ -16,7 +16,6 @@ class player(sloppen.obj):
         #general
         self.hsp = 0
         self.hsp_cap = 60
-        self.friction = 3
         self.vsp = 0
         self.grv = 0.3
         self.grounded = False
@@ -25,8 +24,8 @@ class player(sloppen.obj):
         #walk
         self.walk_speed = 0
         self.walk_cap = 10
-        self.walk_accelerate = 1
-        self.walk_fr = 2
+        self.walk_accelerate = 10
+        self.walk_fr = 20
         #dash
         self.dash_speed = 0
         self.dashes = [100, 100, 100]
@@ -95,7 +94,7 @@ class player(sloppen.obj):
             self.get_input()
             self.death_animation()
         elif self.states == self.state_hurt:
-            self.do_hurt()
+            self.hurting()
             self.check_collision()
             self.update_cords()
 
@@ -118,9 +117,9 @@ class player(sloppen.obj):
 
         #calculate movement speed
         if self.fr == False:
-            self.walk_speed += self.walk_accelerate * self.key_dir
+            self.walk_speed = self.walk_accelerate * self.key_dir
         else:
-            self.walk_speed += self.walk_fr * self.key_dir
+            self.walk_speed = self.walk_fr * self.key_dir
 
         if self.key_dir == 0:
             self.walk_speed = 0
@@ -204,10 +203,6 @@ class player(sloppen.obj):
 
     #enable hsp cap
     def cap_hsp(self):
-        #decrease from hsp from any massive gains of speed
-        if self.hsp != 0:
-            self.hsp -= self.sign(self.hsp) * self.friction
-
         #make sure the hsp cant get to high
         if self.hsp * self.sign(self.hsp) > self.hsp_cap:
             self.hsp = self.hsp_cap * self.sign(self.hsp)
@@ -251,25 +246,41 @@ class player(sloppen.obj):
                 self.sprite_die.flip(True, False)
                 self.sprite_hurt.flip(True, False)
 
+    #make the player hurt
     def do_hurt(self):
-        self.vsp += self.grv
-        if self.sprite != self.sprite_hurt:
-            self.shake(10, 20)
-            self.zoom(1.1)
-            self.health -= 1
-            if self.health <= 0:
-                self.states = self.state_dead
-            self.sprite = self.sprite_hurt
-            self.hsp = (self.hsp * -1) / 2
-        else:
-            self.hurt_counter += 1
-            if self.hurt_counter >= 30:
-                self.hurt_counter = 0
-                self.states = self.state_normal
+        if self.health <= 0:
+            self.states = self.state_dead
+            return
 
-    #enable wall collision
+        self.shake(10, 20)
+        self.zoom(1.1)
+
+        self.health -= 1
+    
+        self.sprite = self.sprite_hurt
+    
+        self.hsp = (self.hsp * -1) / 2
+
+        self.states = self.state_hurt
+
+    #enable hurting
+    def hurting(self):
+        if self.health <= 0:
+            self.states = self.state_dead
+            return
+
+        self.vsp += self.grv
+
+        self.hurt_counter += 1
+        if self.hurt_counter >= 30:
+            self.hurt_counter = 0
+            self.states = self.state_normal
+
+    #enable collisions
     def check_collision(self):
+        #set grounded to false as we have to check again
         self.grounded = False
+        #check game objects
         for i in self.game.map.current_map.map_objects:
             if i.name == "wall":
                 if self.colliding(self.x + self.hsp, self.y, i.collision) == True:
@@ -293,6 +304,20 @@ class player(sloppen.obj):
                 if self.colliding(self.x, self.y + 1, i.collision) == True:
                     self.grounded = True
 
+            #check hurt conditions
+            if i.name == "enemy":
+                if self.colliding(self.x, self.y, i.collision) == True:
+                    if i.states != i.state_dead:
+                        if self.states != self.state_hurt:
+                            self.do_hurt()
+
+            if i.name == "enemy_bullet":
+                if self.colliding(self.x, self.y, i.collision) == True:
+                    if self.states != self.state_hurt:
+                        self.do_hurt()
+                        self.game.map.current_map.remove_object(i.pos)
+
+            #check power ups
             if i.name == "power_fr":
                 if self.colliding(self.x, self.y, i.collision) == True:
                     self.fr = True

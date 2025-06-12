@@ -10,6 +10,9 @@ class menu(sloppen.obj):
 
         self.cursor = 10
 
+        self.music = pygame.mixer.Sound("menu/menu.mp3")
+        self.music.play(-1)
+
         sprite_path = "menu/"
 
         sprite_bg_temp = []
@@ -23,6 +26,7 @@ class menu(sloppen.obj):
             self.sprite_bg.frames[i] = pygame.transform.scale(self.sprite_bg.frames[i], (1280, 720))
     
         self.sprite_title = sloppen.sprite(self.name, [sprite_path + "title/0.png"], 0, 0, self.game)
+        self.sprite_how = sloppen.sprite(self.name, [sprite_path + "how/0.png"], 0, 0, self.game)
 
         self.font_draw = pygame.font.Font("fonts/fontgame.ttf", 30)
 
@@ -31,6 +35,7 @@ class menu(sloppen.obj):
         if self.states == self.state_main:
             #play
             if self.cursor == 10 and self.game.keyboard.check_pressed("K_z"):
+                self.music.stop()
                 self.game.map.switch_map("level_1")
             #how
             elif self.cursor == 70 and self.game.keyboard.check_pressed("K_z"): 
@@ -65,5 +70,6 @@ class menu(sloppen.obj):
             self.game.screen.queue_for_blit(controlls_z, 1000, 10, [0, 0], True, "menu_text", 0)
             controlls_arrows = self.font_draw.render("ARROWS TO MOVE", False, (255, 255, 255))
             self.game.screen.queue_for_blit(controlls_arrows, 980, 50, [0, 0], True, "menu_text", 0)
-
-        self.sprite_title.draw_sprite(0, 0)
+            self.sprite_title.draw_sprite(0, 0)
+        elif self.states == self.state_how:
+            self.sprite_how.draw_sprite(0, 0)

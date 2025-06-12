@@ -1,4 +1,5 @@
 import sloppen
+import pygame
 
 class hud(sloppen.obj):
     def __init__(self, song, game):
@@ -25,7 +26,7 @@ class hud(sloppen.obj):
                 if i.name == "player":
                     self.target = i
         else:
-            if self.target.states = self.target.state_dead:
+            if self.target.states == self.target.state_dead:
                 self.music.stop()
 
     def instance_draw(self):

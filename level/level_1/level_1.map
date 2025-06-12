@@ -6,6 +6,7 @@ bg
 gun
 hud
 power_ups
+enemy
 @imports_end
 @args_start
 @args_end
@@ -317,7 +318,9 @@ power_ups.power_mwj(500 + 128, 500, "level/level_1/wall/5", self.game)
 player.player(500, 500, self.game)
 gun.gun(500, 500, self.game)
 
-hud.hud(self.game)
+enemy.enemy(600, 500, self.game)
+
+hud.hud("level/level_1/level_1.mp3", self.game)
 
 camera.camera(500, 500, "player", 16, self.game)
 @objects_end

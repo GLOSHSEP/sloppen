@@ -84,7 +84,7 @@ class bullet(sloppen.obj):
 
             for i in self.game.map.current_map.map_objects:
                 if i.name == "wall":
-                    if self.colliding(self.x + self.direction * 15, self.y, i.collision) == True:
+                    if self.colliding(self.x + self.direction * 50, self.y, i.collision) == True:
                         self.game.map.current_map.remove_object(self.pos)
                         self.shake(5, 5)
 
