@@ -21,7 +21,7 @@ import sloppen
 
 game = sloppen.game_data("Get David", 60, (1280, 720))
 game.initalize()
-game.map.create_map_file("menu/menu.map")
-game.map.create_map_file("level/level_1/level_1.map")
+game.map.create_map_file("rooms/menu.map")
+game.map.create_map_file("rooms/level_1.map")
 game.map.switch_map("menu")
 game.game_loop()

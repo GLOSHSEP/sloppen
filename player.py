@@ -60,7 +60,7 @@ class player(sloppen.obj):
         self.states = self.state_normal
 
         #sprites
-        sprite_path = "player/"
+        sprite_path = "tiles/player/"
 
         self.sprite_idle = sloppen.sprite(self.name, [sprite_path + "idle/0.png", sprite_path + "idle/1.png", sprite_path + "idle/2.png", sprite_path + "idle/3.png", sprite_path + "idle/4.png"], 6, 0, self.game)
         self.sprite_walk = sloppen.sprite(self.name, [sprite_path + "walk/0.png", sprite_path + "walk/1.png", sprite_path + "walk/2.png", sprite_path + "walk/3.png", sprite_path + "walk/4.png", sprite_path + "walk/5.png"], 6, 0, self.game)

@@ -10,23 +10,24 @@ class menu(sloppen.obj):
 
         self.cursor = 10
 
-        self.music = pygame.mixer.Sound("menu/menu.mp3")
+        self.music = pygame.mixer.Sound("sounds/music/menu.mp3")
         self.music.play(-1)
 
-        sprite_path = "menu/"
+        sprite_path = "backgrounds/menu/"
+        sprite_path_2 = "tiles/"
 
         sprite_bg_temp = []
 
         for i in range(0, 20):
-            sprite_bg_temp.append(sprite_path + "bg/" + str(i) + ".png")
+            sprite_bg_temp.append(sprite_path + str(i) + ".png")
 
         self.sprite_bg = sloppen.sprite(self.name, sprite_bg_temp, 12, 0, self.game)
 
         for i in range(0, len(self.sprite_bg.frames)):
             self.sprite_bg.frames[i] = pygame.transform.scale(self.sprite_bg.frames[i], (1280, 720))
     
-        self.sprite_title = sloppen.sprite(self.name, [sprite_path + "title/0.png"], 0, 0, self.game)
-        self.sprite_how = sloppen.sprite(self.name, [sprite_path + "how/0.png"], 0, 0, self.game)
+        self.sprite_title = sloppen.sprite(self.name, [sprite_path_2 + "title/0.png"], 0, 0, self.game)
+        self.sprite_how = sloppen.sprite(self.name, [sprite_path_2 + "how/0.png"], 0, 0, self.game)
 
         self.font_draw = pygame.font.Font("fonts/fontgame.ttf", 30)
 

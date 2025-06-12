@@ -8,7 +8,7 @@ class gun(sloppen.obj):
         self.x_offset = 0
         self.flipped = False
 
-        sprite_path = "player/"
+        sprite_path = "tiles/player/"
         self.sprite_gun = sloppen.sprite(self.name, [sprite_path + "gun/0.png", sprite_path + "gun/1.png", sprite_path + "gun/2.png"], 3, 0, self.game)
         self.sprite_gun_shoot = sloppen.sprite(self.name, [sprite_path + "gun_shoot/0.png"], 0, 0, self.game)
         self.sprite = self.sprite_gun
@@ -72,7 +72,7 @@ class bullet(sloppen.obj):
         sloppen.obj.__init__(self, "bullet", x, y, True, False, game)
         self.direction = direction
 
-        sprite_path = "player/"
+        sprite_path = "tiles/player/"
         self.sprite_bullet = sloppen.sprite(self.name, [sprite_path + "bullet/0.png", sprite_path + "bullet/1.png"], 2, 0, self.game)
         self.sprite = self.sprite_bullet
 

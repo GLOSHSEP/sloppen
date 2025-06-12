@@ -32,8 +32,25 @@ for i in range(0, len(joined_tiles)):
     if x >= width:
         x = 0
         y += 128
+    print(joined_tiles)
     if joined_tiles[i] != '0':
         if joined_tiles[i] == '10':
-            print('player.player')
+            print('player.player(' + str(x) + ',' + str(y) + ', self.game)')
+        elif joined_tiles[i] == '11':
+            print('camera.camera(' + str(x) + ',' + str(y) + ',"player", 16, self.game)')
+        elif joined_tiles[i] == '12':
+            print('enemy.enemy(' + str(x) + ',' + str(y) + ', self.game)')
+        elif joined_tiles[i] == '13':
+            print('hud.hud("sounds/music/level_1.mp3", self.game)')
+        elif joined_tiles[i] == '14':
+            pass
+        elif joined_tiles[i] == '15':
+            print('gun.gun(' + str(x) + ',' + str(y) + ', self.game)')
+        elif joined_tiles[i] == '16':
+            print('power_ups.power_fr(' + str(x) + ',' + str(y) + ', self.game)')
+        elif joined_tiles[i] == '17':
+            print('power_ups.power_fs(' + str(x) + ',' + str(y) + ', self.game)')
+        elif joined_tiles[i] == '18':
+            print('power_ups.power_mwj(' + str(x) + ',' + str(y) + ', self.game)')
         else:
-            print('wall.wall(' + str(x) + ', ' + str(y) + ', "level/level_1/wall/' + str(joined_tiles[i]) + '", self.game)')
+            print('wall.wall(' + str(x) + ', ' + str(y) + ', "tiles/wall/' + str(joined_tiles[i]) + '", self.game)')

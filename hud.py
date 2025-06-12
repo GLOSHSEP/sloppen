@@ -10,7 +10,7 @@ class hud(sloppen.obj):
         self.music = pygame.mixer.Sound(song)
         self.music.play(-1)
 
-        sprite_path = "hud/"
+        sprite_path = "tiles/hud/"
         self.sprite_main = sloppen.sprite(self.name, [sprite_path + "main/0.png"], 0, 0, self.game)
         self.sprite_h1 = sloppen.sprite(self.name, [sprite_path + "heart_1/0.png"], 0, 0, self.game)
         self.sprite_h2 = sloppen.sprite(self.name, [sprite_path + "heart_2/0.png"], 0, 0, self.game)

@@ -1,4 +1,5 @@
 import sloppen
+import statistics
 
 class enemy(sloppen.obj):
     def __init__(self, x, y, game):
@@ -19,7 +20,7 @@ class enemy(sloppen.obj):
         self.state_dead = 2
         self.states = self.state_walk
 
-        sprite_path = "enemy/"
+        sprite_path = "tiles/enemy/"
         self.sprite_idle = sloppen.sprite(self.name, [sprite_path + "idle/0.png", sprite_path + "idle/1.png", sprite_path + "idle/2.png", sprite_path + "idle/3.png"], 6, 0, self.game)
         self.sprite_hurt = sloppen.sprite(self.name, [sprite_path + "hurt/0.png"], 0, 0, self.game)
         self.sprite_dead = sloppen.sprite(self.name, [sprite_path + "dead/0.png"], 0, 0, self.game)
@@ -58,12 +59,12 @@ class enemy(sloppen.obj):
                     if self.direction == False:
                         if (self.target.x - self.x) > 0 and (self.target.x - self.x) < 1280:
                             if self.shoot_cool_down == 0:
-                                self.game.map.current_map.add_object(enemy_bullet((self.x + 64) + (32 * self.direction), self.y + 64, self.target.x, self.target.y, self.game), self.pos)
+                                self.game.map.current_map.add_object(enemy_bullet((self.x + 64) + (32 * self.direction), self.y + 64, self.target, self.game), self.pos)
                                 self.shoot_cool_down = 30
                     else:
                         if (self.target.x - self.x) < 0 and (self.target.x - self.x) > -1280:
                             if self.shoot_cool_down == 0:
-                                self.game.map.current_map.add_object(enemy_bullet((self.x + 64) + (32 * self.direction), self.y + 64, self.target.x, self.target.y, self.game), self.pos)
+                                self.game.map.current_map.add_object(enemy_bullet((self.x + 64) + (32 * self.direction), self.y + 64, self.target, self.game), self.pos)
                                 self.shoot_cool_down = 30
 
             #add direction switching
@@ -148,44 +149,35 @@ class enemy(sloppen.obj):
                 i.shake(magnitude, length)
 
 class enemy_bullet(sloppen.obj):
-    def __init__(self, x, y, target_x, target_y, game):
+    def __init__(self, x, y, target, game):
         sloppen.obj.__init__(self, "enemy_bullet", x, y, True, False, game)
-        self.target_x = target_x
-        self.target_y = target_y
-        self.hsp = 0
-        self.vsp = 0
+
+        self.target = target
+        self.timer = 120
 
         sprite_path = "player/"
         self.sprite_bullet = sloppen.sprite(self.name, [sprite_path + "bullet/0.png", sprite_path + "bullet/1.png"], 2, 0, self.game)
         self.sprite = self.sprite_bullet
 
     def instance_code(self):
-        print(self.x)
-        print(self.y)
         if self.frozen != True:
-            if self.x < self.target_x:
-                self.hsp = -5
-            elif self.x > self.target_x:
-                self.hsp = 5
+            self.x = statistics.median([(self.x - 5), self.target.x, (self.x + 5)])
+            self.y = statistics.median([(self.y - 5), self.target.y, (self.y + 5)])
 
-            if self.y < self.target_y:
-                self.vsp = -5
-            elif self.y > self.target_y:
-                self.vsp = 5
-
-            self.x += self.hsp
-            self.y += self.vsp
+            self.timer -= 1
+            if self.timer <= 0:
+                self.game.map.current_map.remove_object(self.pos)
 
             self.update_collision()
 
-            for i in self.game.map.current_map.map_objects:
-                if i.name == "wall":
-                    if self.colliding(self.x + self.hsp, self.y, i.collision):
-                        self.game.map.current_map.remove_object(self.pos)
-                        self.shake(5, 5)
-                    if self.colliding(self.x, self.y + self.vsp, i.collision):
-                        self.game.map.current_map.remove_object(self.pos)
-                        self.shake(5, 5)
+            # for i in self.game.map.current_map.map_objects:
+            #     if i.name == "wall":
+            #         if self.colliding(self.x + self.hsp, self.y, i.collision):
+            #             self.game.map.current_map.remove_object(self.pos)
+            #             self.shake(5, 5)
+            #         if self.colliding(self.x, self.y + self.vsp, i.collision):
+            #             self.game.map.current_map.remove_object(self.pos)
+            #             self.shake(5, 5)
 
             if self.x > self.game.map.current_map.width or self.x < 0 - self.sprite.width:
                 self.game.map.current_map.remove_object(self.pos)
