@@ -7,6 +7,7 @@ gun
 hud
 power_ups
 enemy
+win
 @imports_end
 @args_start
 @args_end
@@ -61,6 +62,7 @@ power_ups.power_fr(2816,2560, self.game)
 power_ups.power_fs(2944,2560, self.game)
 power_ups.power_mwj(3072,2560, self.game)
 enemy.enemy(3712 - 128 - 128,2560, self.game)
+win.win(3712, 2560, "menu", self.game)
 player.player(1792,2688, self.game)
 gun.gun(1920,2688, self.game)
 hud.hud("sounds/music/level_1.mp3", self.game)

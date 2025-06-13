@@ -93,6 +93,7 @@ class player(sloppen.obj):
         elif self.states == self.state_dead:
             self.death_animation()
         elif self.states == self.state_hurt:
+            self.get_input()
             self.hurting()
             self.check_collision()
             self.update_cords()
