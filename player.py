@@ -62,6 +62,7 @@ class player(sloppen.obj):
         self.hurt_fx = pygame.mixer.Sound("sounds/effects/hurt.mp3")
         self.death_fx = pygame.mixer.Sound("sounds/effects/death.mp3")
         self.powerup_fx = pygame.mixer.Sound("sounds/effects/powerup.wav")
+        self.dash_fx = pygame.mixer.Sound("sounds/effects/dash.mp3")
 
         #sprites
         sprite_path = "tiles/player/"
@@ -150,6 +151,8 @@ class player(sloppen.obj):
 
             #preform dash
             if self.key_dash and self.can_dash == True:
+                self.dash_fx.play()
+
                 #little jump
                 if self.dash_speed <= 10:
                     self.vsp = 0
