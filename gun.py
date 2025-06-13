@@ -34,18 +34,19 @@ class gun(sloppen.obj):
                         self.sprite = self.sprite_gun
 
                 #check if the player can shoot
-                if self.shoot_timer == 0:
-                    if self.target.key_shoot:
-                        if self.target.fs == False:
-                            self.shoot_timer = self.target.bullet_cool_down
-                        else:
-                            self.shoot_timer = self.target.fs
-                        self.sprite = self.sprite_gun_shoot
-                        self.x_offset = 20
-                        self.game.map.current_map.add_object(bullet((self.x + 64) + (32 * self.target.direction), self.y + 64, self.target.direction, self.game), self.pos)
-                        for i in self.game.map.current_map.map_objects:
-                            if i.name == "camera":
-                                i.shake(10, 3)
+                if self.target.states == self.target.state_normal:
+                    if self.shoot_timer == 0:
+                        if self.target.key_shoot:
+                            if self.target.fs == False:
+                                self.shoot_timer = self.target.bullet_cool_down
+                            else:
+                                self.shoot_timer = self.target.fs
+                            self.sprite = self.sprite_gun_shoot
+                            self.x_offset = 20
+                            self.game.map.current_map.add_object(bullet((self.x + 64) + (32 * self.target.direction), self.y + 64, self.target.direction, self.game), self.pos)
+                            for i in self.game.map.current_map.map_objects:
+                                if i.name == "camera":
+                                    i.shake(10, 3)
 
                 #decrease the x offset
                 if self.x_offset > 0:
@@ -56,16 +57,17 @@ class gun(sloppen.obj):
                 self.y = self.target.y
 
                 #flip sprites
-                if self.target.key_left:
-                    if self.flipped == False:
-                        self.flipped = True
-                        self.sprite_gun.flip(True, False)
-                        self.sprite_gun_shoot.flip(True, False)
-                elif self.target.key_right:
-                    if self.flipped == True:
-                        self.flipped = False
-                        self.sprite_gun.flip(True, False)
-                        self.sprite_gun_shoot.flip(True, False)
+                if self.target.states == self.target.state_normal:
+                    if self.target.key_left:
+                        if self.flipped == False:
+                            self.flipped = True
+                            self.sprite_gun.flip(True, False)
+                            self.sprite_gun_shoot.flip(True, False)
+                    elif self.target.key_right:
+                        if self.flipped == True:
+                            self.flipped = False
+                            self.sprite_gun.flip(True, False)
+                            self.sprite_gun_shoot.flip(True, False)
 
 class bullet(sloppen.obj):
     def __init__(self, x, y, direction, game):

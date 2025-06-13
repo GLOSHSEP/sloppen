@@ -30,7 +30,7 @@ class camera(sloppen.obj):
                     self.x_to = self.target.x
                     self.y_to = self.target.y
         else:
-            self.x_to = self.target.x
+            self.x_to = self.target.x #+ (self.target.direction * 128)
             self.y_to = self.target.y
 
             self.x += (self.x_to - self.x) / 15

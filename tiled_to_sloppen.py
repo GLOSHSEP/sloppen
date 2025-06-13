@@ -37,6 +37,7 @@ camera = []
 hud = []
 gun = []
 player = []
+win = []
 enemy = []
 power_up = []
 wall = []
@@ -57,7 +58,7 @@ for i in range(0, len(joined_tiles)):
         elif joined_tiles[i] == '13':
             hud.append('hud.hud("sounds/music/level_1.mp3", self.game)')
         elif joined_tiles[i] == '14':
-            pass
+            win.append('win.win(' + str(x) + ',' + str(y) + ', "done", self.game)')
         elif joined_tiles[i] == '15':
             gun.append('gun.gun(' + str(x) + ',' + str(y) + ', self.game)')
         elif joined_tiles[i] == '16':
@@ -79,6 +80,9 @@ for i in power_up:
     print(i)
 
 for i in enemy:
+    print(i)
+
+for i in win:
     print(i)
 
 for i in player:

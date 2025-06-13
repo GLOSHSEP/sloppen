@@ -26,7 +26,7 @@ class win(sloppen.obj):
                         self.won = True
 
                         #save progress if you arent done the game
-                        if next != "done":
+                        if self.next != "done":
                             try:
                                 file = open("save", 'x')
                             except:
@@ -44,3 +44,14 @@ class win(sloppen.obj):
             self.draw_self()
         else:
             self.sprite_clear.draw_sprite(0, 0)
+
+class done(sloppen.obj):
+    def __init__(self, game):
+        sloppen.obj.__init__(self, "done", 0, 0, True, False, game)
+
+        self.sprite_win = sloppen.sprite(self.name, ["tiles/win/end/0.png"], 0, 0, self.game)
+        self.sprite = self.sprite_win
+
+    def instance_code(self):
+        if self.game.keyboard.check_pressed("K_z"):
+            self.game.map.switch_map("menu")

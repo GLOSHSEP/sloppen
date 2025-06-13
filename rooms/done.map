@@ -1,0 +1,13 @@
+@imports_start
+win
+@imports_end
+@args_start
+@args_end
+@properties_start
+done
+1280
+720
+@properties_end
+@objects_start
+win.done(self.game)
+@objects_end
