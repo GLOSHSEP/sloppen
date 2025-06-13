@@ -1,4 +1,5 @@
 import sloppen
+import pygame
 import statistics
 
 class enemy(sloppen.obj):
@@ -19,6 +20,8 @@ class enemy(sloppen.obj):
         self.state_hurt = 1
         self.state_dead = 2
         self.states = self.state_walk
+
+        self.hurt_fx = pygame.mixer.Sound("sounds/effects/en_hurt.wav")
 
         sprite_path = "tiles/enemy/"
         self.sprite_idle = sloppen.sprite(self.name, [sprite_path + "idle/0.png", sprite_path + "idle/1.png", sprite_path + "idle/2.png", sprite_path + "idle/3.png"], 6, 0, self.game)
@@ -150,6 +153,7 @@ class enemy(sloppen.obj):
                     i.destroy = True
                     self.vsp -= 3
                     self.hp -= 1
+                    self.hurt_fx.play()
                     if self.hp > 0:
                         self.states = self.state_hurt
                     else:
@@ -188,13 +192,13 @@ class enemy_bullet(sloppen.obj):
         self.target = target
         self.timer = 120
 
-        sprite_path = "tiles/player/"
-        self.sprite_bullet = sloppen.sprite(self.name, [sprite_path + "bullet/0.png", sprite_path + "bullet/1.png"], 2, 0, self.game)
+        sprite_path = "tiles/enemy/"
+        self.sprite_bullet = sloppen.sprite(self.name, [sprite_path + "bullet/0.png"], 2, 0, self.game)
         self.sprite = self.sprite_bullet
 
     def instance_code(self):
         if self.frozen != True:
-            self.x = statistics.median([(self.x - 5), self.target.x, (self.x + 5)])
+            self.x = statistics.median([(self.x - 3), self.target.x, (self.x + 3)])
             self.y = statistics.median([(self.y - 2), self.target.y, (self.y + 2)])
 
             self.timer -= 1

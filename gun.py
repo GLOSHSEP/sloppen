@@ -1,4 +1,5 @@
 import sloppen
+import pygame
 
 class gun(sloppen.obj):
     def __init__(self, x, y, game):
@@ -7,6 +8,8 @@ class gun(sloppen.obj):
         self.shoot_timer = 0
         self.x_offset = 0
         self.flipped = False
+
+        self.shoot_fx = pygame.mixer.Sound("sounds/effects/shoot.wav")
 
         sprite_path = "tiles/player/"
         self.sprite_gun = sloppen.sprite(self.name, [sprite_path + "gun/0.png", sprite_path + "gun/1.png", sprite_path + "gun/2.png"], 3, 0, self.game)
@@ -43,6 +46,7 @@ class gun(sloppen.obj):
                                 self.shoot_timer = self.target.fs
                             self.sprite = self.sprite_gun_shoot
                             self.x_offset = 20
+                            self.shoot_fx.play()
                             self.game.map.current_map.add_object(bullet((self.x + 64) + (32 * self.target.direction), self.y + 64, self.target.direction, self.game), self.pos)
                             for i in self.game.map.current_map.map_objects:
                                 if i.name == "camera":

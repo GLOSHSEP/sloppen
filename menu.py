@@ -14,6 +14,8 @@ class menu(sloppen.obj):
 
         self.show_error = False
 
+        self.game.screen.scale(1280, 720)
+
         self.music = pygame.mixer.Sound("sounds/music/menu.mp3")
         self.music.play(-1)
 
@@ -36,6 +38,9 @@ class menu(sloppen.obj):
         self.font_draw = pygame.font.Font("fonts/fontgame.ttf", 30)
 
     def instance_code(self):
+        #set it to false so it only display if you are hovering over the load button
+        self.show_error = False
+
         #main menu
         if self.states == self.state_main:
             #play
@@ -43,21 +48,20 @@ class menu(sloppen.obj):
                 self.music.stop()
                 self.game.map.switch_map("level_1")
             #load
-            elif self.cursor == 70 and self.game.keyboard.check_pressed("K_z"): 
-                try:
-                    file = open("save", 'r')
-                    data = file.readlines()
-                    file.close()
-                    self.music.stop()
-                    self.game.map.switch_map(data[0])
-                except:
+            elif self.cursor == 70: 
+                if os.path.exists("save"):
+                    if self.game.keyboard.check_pressed("K_z"):
+                        file = open("save", 'r')
+                        data = file.readlines()
+                        file.close()
+                        self.music.stop()
+                        self.game.map.switch_map(data[0])
+                else:
                     self.show_error = True
             #delete
             if self.cursor == 130 and self.game.keyboard.check_pressed("K_z"):
-                try:
+                if os.path.exists("save"):
                     os.remove("save") 
-                except:
-                    pass
             #how
             elif self.cursor == 190 and self.game.keyboard.check_pressed("K_z"): 
                 self.states = self.state_how

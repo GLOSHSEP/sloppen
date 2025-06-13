@@ -1,5 +1,5 @@
 import sloppen
-import wall
+import pygame
 
 class player(sloppen.obj):
     def __init__(self, x, y, game):
@@ -23,7 +23,7 @@ class player(sloppen.obj):
         self.key_dir = 0
         #walk
         self.walk_speed = 0
-        self.walk_cap = 10
+        self.walk_cap = 20
         self.walk_accelerate = 10
         self.walk_fr = 20
         #dash
@@ -58,6 +58,10 @@ class player(sloppen.obj):
         self.state_dead = 2
         self.state_hurt = 3
         self.states = self.state_normal
+
+        self.hurt_fx = pygame.mixer.Sound("sounds/effects/hurt.mp3")
+        self.death_fx = pygame.mixer.Sound("sounds/effects/death.mp3")
+        self.powerup_fx = pygame.mixer.Sound("sounds/effects/powerup.wav")
 
         #sprites
         sprite_path = "tiles/player/"
@@ -121,11 +125,8 @@ class player(sloppen.obj):
         else:
             self.walk_speed = self.walk_fr * self.key_dir
 
-        if self.key_dir == 0:
-            self.walk_speed = 0
-
-        if self.walk_speed * self.key_dir > self.walk_cap:
-            self.walk_speed = self.walk_cap * self.key_dir
+        #if self.key_dir == 0:
+            #self.walk_speed = 0
 
         self.hsp = self.walk_speed
 
@@ -251,6 +252,7 @@ class player(sloppen.obj):
 
         self.shake(10, 20)
         self.zoom(1.1)
+        self.hurt_fx.play()
 
         self.health -= 1
     
@@ -269,7 +271,7 @@ class player(sloppen.obj):
         self.vsp += self.grv
 
         self.hurt_counter += 1
-        if self.hurt_counter >= 30:
+        if self.hurt_counter >= 10:
             self.hurt_counter = 0
             self.states = self.state_normal
 
@@ -318,16 +320,19 @@ class player(sloppen.obj):
             if i.name == "power_fr":
                 if self.colliding(self.x, self.y, i.collision) == True:
                     self.fr = True
+                    self.powerup_fx.play()
                     i.destroy = True
 
             if i.name == "power_fs":
                 if self.colliding(self.x, self.y, i.collision) == True:
                     self.fs = True
+                    self.powerup_fx.play()
                     i.destroy = True
 
             if i.name == "power_mwj":
                 if self.colliding(self.x, self.y, i.collision) == True:
                     self.mwj = True
+                    self.powerup_fx.play()
                     i.destroy = True
 
         if self.x > self.game.map.current_map.width or self.x < 0 - self.sprite.width:
@@ -352,13 +357,18 @@ class player(sloppen.obj):
             self.sprite = self.sprite_die
             self.shake(20, 60 * 5)
             self.zoom(1.5)
+            self.death_fx.play()
         else:
             if self.sprite.frame_index == len(self.sprite.frames) - 1:
                 self.sprite.fps = 0
 
         if self.game.keyboard.check_pressed("K_z"):
+            self.death_fx.stop()
+            self.game.screen.scale(1280, 720)
             self.game.map.switch_map(self.game.map.current_map.name)
         if self.game.keyboard.check_pressed("K_x"):
+            self.death_fx.stop()
+            self.game.screen.scale(1280, 720)
             self.game.map.switch_map("menu")
 
     def shake(self, magnitude, length):
