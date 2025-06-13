@@ -325,6 +325,10 @@ class map_game:
                 return
             self.map_objects[i].instance_draw() 
 
+        for i in range(0, len(self.map_objects)):
+            if self.map_objects[i].destroy:
+                self.map_objects[i] = 0
+
         for i in self.remove_buffer:
             self.map_objects[i] = 0
 
@@ -520,9 +524,8 @@ class obj:
         self.collision = rectangle
         self.collision.center = (self.x + (rectangle[2] / 2), self.y + (rectangle[3] / 2))
 
-        #ideally you have some string like 'current_instance.instance_code();current.instance_draw()
-        self.inputarray = [""] #[misc_inputs]
-        self.returnarray = ["", 0] #[misc_outputs, destroy]
+        self.destroy = False
+
         self.name = name
 
     def update_collision(self):
@@ -546,18 +549,6 @@ class obj:
     def draw_self_gui(self):
         if self.visible == True:
             self.sprite.draw_sprite_gui(self.x, self.y)
-
-    def instance_edit_array(self, io, index, value): 
-        if io == "i": 
-            self.inputarray[index] = value  
-        elif io == "o": 
-            self.returnarray[index] = value 
-
-    def instance_done(self): 
-        return self.returnarray
-    
-    def instance_pre(self): 
-        return self.inputarray 
     
     def colliding(self, x, y, rect):
         rectmodxy = [x, y, self.collision[2], self.collision[3]]

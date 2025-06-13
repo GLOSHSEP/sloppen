@@ -91,7 +91,6 @@ class player(sloppen.obj):
             self.check_collision()
             self.update_cords()
         elif self.states == self.state_dead:
-            self.get_input()
             self.death_animation()
         elif self.states == self.state_hurt:
             self.hurting()
@@ -131,9 +130,6 @@ class player(sloppen.obj):
 
         #add gravity
         self.vsp += self.grv
-    
-        if self.game.keyboard.check_pressed("K_RSHIFT") == 1:
-            self.states = self.state_hurt
 
     #enable dash
     def dash(self):
@@ -315,23 +311,23 @@ class player(sloppen.obj):
                 if self.colliding(self.x, self.y, i.collision) == True:
                     if self.states != self.state_hurt:
                         self.do_hurt()
-                        self.game.map.current_map.remove_object(i.pos)
+                        i.destroy = True
 
             #check power ups
             if i.name == "power_fr":
                 if self.colliding(self.x, self.y, i.collision) == True:
                     self.fr = True
-                    self.game.map.current_map.remove_object(i.pos)
+                    i.destroy = True
 
             if i.name == "power_fs":
                 if self.colliding(self.x, self.y, i.collision) == True:
                     self.fs = True
-                    self.game.map.current_map.remove_object(i.pos)
+                    i.destroy = True
 
             if i.name == "power_mwj":
                 if self.colliding(self.x, self.y, i.collision) == True:
                     self.mwj = True
-                    self.game.map.current_map.remove_object(i.pos)
+                    i.destroy = True
 
         if self.x > self.game.map.current_map.width or self.x < 0 - self.sprite.width:
             self.health = 0
@@ -358,8 +354,11 @@ class player(sloppen.obj):
         else:
             if self.sprite.frame_index == len(self.sprite.frames) - 1:
                 self.sprite.fps = 0
-        if self.key_shoot:
+
+        if self.game.keyboard.check_pressed("K_z"):
             self.game.map.switch_map(self.game.map.current_map.name)
+        if self.game.keyboard.check_pressed("K_x"):
+            self.game.map.switch_map("menu")
 
     def shake(self, magnitude, length):
         for i in self.game.map.current_map.map_objects:
@@ -374,7 +373,7 @@ class player(sloppen.obj):
 class player_ghost(sloppen.obj):
     def __init__(self, x, y, game, flip):
         sloppen.obj.__init__(self, "ghost", x, y, True, False, game)
-        sprite_path = "player/"
+        sprite_path = "tiles/player/"
         self.sprite_ghost = sloppen.sprite(self.name, [sprite_path + "ghost/0.png", sprite_path + "ghost/1.png", sprite_path + "ghost/2.png"], 6, 0, self.game)
         self.sprite = self.sprite_ghost
         if flip:
@@ -384,5 +383,5 @@ class player_ghost(sloppen.obj):
         if self.frozen != True:
             if self.sprite.frame_index == len(self.sprite.frames) - 1:
                 self.sprite.fps = 0
-                self.game.map.current_map.remove_object(self.pos)
+                self.destroy = True
                 self.frozen = True
