@@ -1,7 +1,9 @@
 import pygame
 
+#class for containing game engine data
 class game_data:
     def __init__(self, window_name, fps, res):
+        #create variables for all the nessascary data
         self.map = map_manager(self)
         self.keyboard = keyboard_manager(self)
         self.screen = screen_manager(window_name, res, self)
@@ -17,6 +19,7 @@ class game_data:
     def initalize(self):
         self.set_fps(self.fps)
 
+    #update the game and all nessasary things
     def update_game(self):
         self.events = pygame.event.get()
 
@@ -29,11 +32,13 @@ class game_data:
         self.screen.draw()
         self.fpsclock.tick(self.fps)
 
+    #main loop
     def game_loop(self): 
         while self.run == True: 
             self.update_game() 
         pygame.quit() 
 
+#class for managing keyboard inputs
 class keyboard_manager:
     def __init__(self, game):
         self.game = game
@@ -187,31 +192,35 @@ class keyboard_manager:
                     if ce.key == i[3]:
                         i[1] = 0
 
-
+    #check if a key is held down
     def check(self, key):
         for i in self.keys:
             if i[0] == key:
                 return i[1]
         return False
 
+    #check if a key has been pressed for 1 frame
     def check_pressed(self, key):
         for i in self.keys:
             if i[0] == key:
                 return i[1] == 1 and i[2] == 0
         return False
 
+    #check if a key has been released for 1 frame
     def check_released(self, key):
         for i in self.keys:
             if i[0] == key:
                 return i[1] == 1 and i[2] == 0
         return False    
 
+#class for managing and containing all maps
 class map_manager:
     def __init__(self, game):
         self.game = game
         self.current_map = None
         self.all_maps = []
     
+    #switch the map and set destroy to false if you want the map to retain its state
     def switch_map(self, new_map, destroy = True):
         for i in self.all_maps:
             if i.name == new_map:
@@ -220,9 +229,11 @@ class map_manager:
                 self.current_map = i
                 self.current_map.create_map()
 
+    #create a new map directly in the game code
     def create_map(self, name, map_need, args, needed_files, width, height):
         self.all_maps.append(map_game(name, map_need, args, needed_files, width, height, self.game))
 
+    #make a new map from a file
     def create_map_file(self, file):
         map_file = open(file, "r")
 
@@ -279,9 +290,11 @@ class map_manager:
 
         self.all_maps.append(map_game(properties[0], objects, args, imports, int(properties[1]), int(properties[2]), self.game))
 
+    #run the main loop for maps
     def run_map(self):
         self.current_map.run_map()
 
+#class for maps and their data
 class map_game:
     def __init__(self, name, map_need, args, needed_files, width, height, game):
         self.name = name
@@ -295,6 +308,7 @@ class map_game:
         self.add_buffer = []
         self.remove_buffer = []
 
+    #create and initialize the map
     def create_map(self):
         execute_string = ""
         for i in self.needed_files:
@@ -303,51 +317,79 @@ class map_game:
             execute_string = execute_string + "self.map_objects.append(" + i + ")\n"
         exec(execute_string)
 
+    #destroy all the object data for the map
     def destroy_map(self):
         for i in range(len(self.map_objects) - 1, -1, -1):
             self.map_objects.pop(i)
 
+    #add an object to the map
     def add_object(self, object_add, index):
         self.add_buffer.append([index, object_add])
 
+    #remove an object from the map
     def remove_object(self, index):
         self.remove_buffer.append(index)
 
+    #main map loop
     def run_map(self):
+        #run the code for each object
         for i in range(0, len(self.map_objects)):
+            #bounds check
             if i >= len(self.map_objects):
                 return
+
+            #update the object so it knows its position in the object array
             self.map_objects[i].update(i)
+
+            #bounds check
             if i >= len(self.map_objects):
                 return
+
+            #run the objects code
             self.map_objects[i].instance_code() 
+
+            #bounds check
             if i >= len(self.map_objects):
                 return
+            
+            #run the objects draw code
             self.map_objects[i].instance_draw() 
 
+        #check if the object wants to be destroyed
         for i in range(0, len(self.map_objects)):
             if self.map_objects[i].destroy:
                 self.map_objects[i] = 0
 
+        #check if the object has been marked to be destroyed
         for i in self.remove_buffer:
             self.map_objects[i] = 0
 
+        #destroy the objects
         while True:
+            #variable for keeping track if there any objects left
             not_found = True
+            #loop through every object and check
             for i in range(0, len(self.map_objects)):
+                #check if the object should be destroyed
                 if self.map_objects[i] == 0:
+                    #destroy object and restart loop as to not mess with the array indexs
                     self.map_objects.pop(i)
                     not_found = False
                     break
+            #check if the loop should end
             if not_found:
+                #no objects found end loop
                 break
 
+        #reset the remove buffer
         self.remove_buffer = []
 
+        #add any new objects and reset the add buffer
         for i in self.add_buffer:
             self.map_objects.insert(i[0], i[1])
         self.add_buffer = []
 
+#class for sprites
 class sprite:
     def __init__(self, name, source_frames, fps, frame_index, game):
         self.name = name
@@ -362,6 +404,7 @@ class sprite:
         self.game = game
         self.init_sprite()
 
+    #initialize the sprite
     def init_sprite(self):
         for i in self.source_frames:
             self.frames.append(pygame.image.load(i).convert_alpha())
@@ -369,21 +412,32 @@ class sprite:
         self.height = self.frames[0].get_size()[1]
         self.rect = self.frames[0].get_rect()
 
+    #flip the sprite
     def flip(self, horizontal, vertical):
         for i in range(0, len(self.frames)):
             self.frames[i] = pygame.transform.flip(self.frames[i], horizontal, vertical)
     
+    #draw the sprite defualt to view port 0 ( note at this time only 1 is supported ) and offset [0, 0] though others can be used if nessascary gui false
     def draw_sprite(self, x, y, viewport_number = 0, offset = [0, 0]):
+        #only animate if the fps isnt 0
         if self.fps != 0:
+            #should the frame increase
             if self.counter >= self.game.fps / self.fps:
+                #should the frame advance or reset
                 if self.frame_index < len(self.frames) - 1:
+                    #increase frame index
                     self.frame_index = self.frame_index + 1
                 else: 
+                    #reset frame index
                     self.frame_index = 0
+                #reset counter
                 self.counter = 0
+            #increase counter
             self.counter += 1
+        #draw the sprite to specify view port
         self.game.screen.queue_for_blit(self.frames[self.frame_index], x, y, offset, False, self.name, viewport_number)
 
+    #exact same as above function but the set gui flag to true
     def draw_sprite_gui(self, x, y, viewport_number = 0, offset = [0, 0]):
         if self.fps != 0:
             if self.counter >= self.game.fps / self.fps:
@@ -395,30 +449,37 @@ class sprite:
             self.counter += 1
         self.game.screen.queue_for_blit(self.frames[self.frame_index], x, y, offset, True, self.name, viewport_number)
 
+#class for the screen manager
 class screen_manager:
     def __init__(self, window_name, resolution, game):
         self.game = game
         self.window = None
         self.window_name = window_name
         self.resolution = resolution
+        #create a default view port and reserve space for more ( note at this time only 1 is supported )
         self.viewports = [viewport(self.resolution, self.game), 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.init_window()
 
+    #initialize the main game window
     def init_window(self): 
         pygame.init() 
         pygame.display.set_caption(self.window_name) 
         self.window = pygame.display.set_mode((self.resolution[0], self.resolution[1])) 
 
+    #add a view port ( do not this time only 1 is supported)
     def add_viewport(self, number):
         if self.viewports[number] == 0:
             self.viewports[number] = viewport(self.resolution, self.game)
 
+    #remove a viewp port
     def remove_viewport(self, number):
         self.viewports[number] = 0
 
+    #queue a surface to be drawn for a specific view port ( note only 1 is currently supported )
     def queue_for_blit(self, surface, x, y, offset, gui, name, viewport_number):
         self.viewports[viewport_number].queue_for_blit(surface, x, y, offset, gui, name)
 
+    #draw all view ports to the window
     def draw(self):
         self.window.fill([0, 0, 0])
         for i in self.viewports:
@@ -427,85 +488,97 @@ class screen_manager:
                 self.window.blit(i.surface, (i.offset[0], i.offset[1]))
         pygame.display.update()
 
+    #update the offset for all surfaces in any specific viewport ( note only 1 is supported at this time )
     def update_offset(self, x, y, viewport_number = 0):
         self.viewports[viewport_number].update_offset(x, y)
 
+    #update the offset for all non gui surfaces in any specific viewport ( note only 1 is supported at this time )
     def update_offset_non_gui(self, x, y, viewport_number = 0):
         self.viewports[viewport_number].update_offset_non_gui(x, y)
 
+    #update the offset for all gui surfaces in any specific viewport ( note only 1 is supported at this time )
     def update_offset_gui(self, x, y, viewport_number = 0):
         self.viewports[viewport_number].update_offset_gui(x, y)
 
+    #update the offset for surfaces of a specific name in any specific viewport ( note only 1 is supported at this time )
     def update_offset_name(self, x, y, name, viewport_number = 0):
         self.viewports[viewport_number].update_offset_name(x, y, name)
 
+    #scale any specific view port ( note only 1 is supported at this time )
     def scale(self, width, height, viewport_number = 0):
         self.viewports[viewport_number].scale(width, height)
 
+    #rotate any specific view port ( note only 1 is supported at this time ) ( note this is currently non functional )
     def rotate(self, angle, viewport_number = 0):
         self.viewports[viewport_number].rotate(angle)
 
+#class for view ports
 class viewport:
     def __init__(self, resolution, game):
         self.game = game
-        self.blit_array = []
+        self.blit_array = [] #structured like [surface, x, y, offset, gui, name]
         self.offset = [0, 0]
         self.scale_amount = [resolution[0], resolution[1]]
         self.rotation_angle = 0
         self.resolution = resolution
         self.surface = pygame.Surface((resolution[0], resolution[1]))
 
+    #queue any surface to be drawn
     def queue_for_blit(self, surface, x, y, offset, gui, name):
         self.blit_array.append([surface, x, y, offset, gui, name])
 
+    #draw all queue surfaces to view port
     def draw(self):
+        #create new surface
         self.surface = pygame.Surface((self.resolution[0], self.resolution[1]))
+        #loop through blit array and blit every surface to the view port surface
         for i in self.blit_array:
             self.surface.blit(i[0], (i[1] + i[3][0], i[2] + i[3][1]))
+        #apply view port rotation
         #self.surface = self.rotate_surface(self.surface, self.rotation_angle)
+        #apply scale and offset the sprites based on the scale
         self.surface = pygame.transform.scale(self.surface, (self.scale_amount[0], self.scale_amount[1]))
         self.offset[0] = (self.resolution[0] - self.scale_amount[0]) / 2
         self.offset[1] = (self.resolution[1] - self.scale_amount[1]) / 2
+        #reset the blit array
         self.blit_array = []
 
+    #update the offset for all surfaces
     def update_offset(self, x, y):
         for i in self.blit_array:
             i[1] -= x
             i[2] -= y
 
+    #update the offset for all non gui surfaces
     def update_offset_non_gui(self, x, y):
         for i in self.blit_array:
             if not i[4]:
                 i[1] -= x
                 i[2] -= y
 
+    #update offset for all gui surfaces
     def update_offset_gui(self, x, y):
         for i in self.blit_array:
             if i[4]:
                 i[1] -= x
                 i[2] -= y
 
+    #update all surfaces with a specific name
     def update_offset_name(self, x, y, name):
         for i in self.blit_array:
             if i[5] == name:
                 i[1] -= x
                 i[2] -= y
 
-    def scale_non_gui(self, width, height):
-        pass
-
+    #scale all surfaces
     def scale(self, width, height):
         self.scale_amount = [width, height]
 
-    def rotate_surface(self, surface, angle):
-        surface = pygame.transform.rotate(surface, angle)
-        new_surface = pygame.Surface((self.resolution[0], self.resolution[1]))
-        new_surface.blit(surface, (0, 0))
-        return new_surface
-
+    #rotate all surfaces ( note currently not implemented )
     def rotate(self, angle):
         self.rotation_angle = angle
 
+#class for game objects
 class obj:
     def __init__(self, name, x, y, visible, frozen, game):
         self.pos = 0
@@ -528,32 +601,40 @@ class obj:
 
         self.name = name
 
+    #update objects collision
     def update_collision(self):
         rectangle = self.sprite.rect
         self.collision = rectangle 
         self.collision.center = (self.x + (rectangle[2] / 2), self.y + (rectangle[3] / 2))
 
+    #update the objects varialbe for storing the position in the object array
     def update(self, position):
         self.pos = position 
 
+    #object code
     def instance_code(self): 
         pass
 
+    #object draw
     def instance_draw(self):
         self.draw_self()
 
+    #draw the main object sprite
     def draw_self(self):
         if self.visible == True:
             self.sprite.draw_sprite(self.x, self.y)
 
+    #sraw the main object sprite to the gui
     def draw_self_gui(self):
         if self.visible == True:
             self.sprite.draw_sprite_gui(self.x, self.y)
     
+    #check if the objects rect width and height with any given x and y values overlap with another rwectangle
     def colliding(self, x, y, rect):
         rectmodxy = [x, y, self.collision[2], self.collision[3]]
         return rect.colliderect(rectmodxy)
-        
+
+    #get the sign of a number   
     def sign(self, just_a_number_smh): 
         if just_a_number_smh > 0: 
             return 1 

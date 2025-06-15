@@ -1,6 +1,6 @@
 """
 Marley Ardrey
-09/06/2025
+13/06/2025
 Get David
 Get David is a game where you play as a blob named Edwin with a task to get the diabolical square David
 All instructions explained in game
@@ -9,6 +9,11 @@ pip install pygame
 pip3 install pygame
 One font from https://www.1001freefonts.com/3d-fonts.php was used
 Menu background from https://www.reddit.com/r/earthbound/comments/morrbn/i_made_a_funky_earthbound_battle_background/
+Level background from earthbound
+Death sound from super mario world
+Dash sound effect from ultrakill
+Victory music from deltarune
+All other music and sound effects are from undertale
 """
 
 try: 

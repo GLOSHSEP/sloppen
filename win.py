@@ -33,7 +33,6 @@ class win(sloppen.obj):
 
                         #save progress if you arent done the game
                         if self.next != "done":
-                            print("box")
                             try:
                                 file = open("save", 'x')
                             except:
