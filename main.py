@@ -7,7 +7,7 @@ All instructions explained in game
 Requires pygame install via
 pip install pygame
 pip3 install pygame
-One font from https://www.1001freefonts.com/3d-fonts.php was used
+Front from https://www.dafont.com/pixellari.font
 Menu background from https://www.reddit.com/r/earthbound/comments/morrbn/i_made_a_funky_earthbound_battle_background/
 Level background from earthbound
 Death sound from super mario world

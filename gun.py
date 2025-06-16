@@ -62,12 +62,12 @@ class gun(sloppen.obj):
 
                 #flip sprites
                 if self.target.states == self.target.state_normal:
-                    if self.target.key_left:
+                    if self.target.key_dir == -1:
                         if self.flipped == False:
                             self.flipped = True
                             self.sprite_gun.flip(True, False)
                             self.sprite_gun_shoot.flip(True, False)
-                    elif self.target.key_right:
+                    elif self.target.key_dir == 1:
                         if self.flipped == True:
                             self.flipped = False
                             self.sprite_gun.flip(True, False)

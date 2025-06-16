@@ -225,7 +225,7 @@ class player(sloppen.obj):
             self.sprite = self.sprite_dash
 
         #player is facing left
-        if self.key_left:
+        if self.key_dir == -1:
             if self.flipped == False:
                 self.flipped = True
                 self.sprite_idle.flip(True, False)
@@ -236,7 +236,7 @@ class player(sloppen.obj):
                 self.sprite_die.flip(True, False)
                 self.sprite_hurt.flip(True, False)
         #player is facing right
-        elif self.key_right:
+        elif self.key_dir == 1:
             if self.flipped == True:
                 self.flipped = False
                 self.sprite_idle.flip(True, False)
