@@ -197,32 +197,31 @@ class enemy_bullet(sloppen.obj):
         self.sprite = self.sprite_bullet
 
     def instance_code(self):
-        if self.frozen != True:
-            self.x = statistics.median([(self.x - 3), self.target.x, (self.x + 3)])
-            self.y = statistics.median([(self.y - 2), self.target.y, (self.y + 2)])
+        self.x = statistics.median([(self.x - 3), self.target.x, (self.x + 3)])
+        self.y = statistics.median([(self.y - 2), self.target.y, (self.y + 2)])
 
-            self.timer -= 1
-            if self.timer <= 0:
-                self.destroy = True
+        self.timer -= 1
+        if self.timer <= 0:
+            self.destroy = True
 
-            self.update_collision()
+        self.update_collision()
 
-            for i in self.game.map.current_map.map_objects:
-                if i.name == "wall":
-                    if self.colliding(self.x, self.y, i.collision):
-                        self.destroy = True
-                        self.shake(5, 5)
-                    if self.colliding(self.x, self.y, i.collision):
-                        self.destroy = True
-                        self.shake(5, 5)
+        for i in self.game.map.current_map.map_objects:
+            if i.name == "wall":
+                if self.colliding(self.x, self.y, i.collision):
+                    self.destroy = True
+                    self.shake(5, 5)
+                if self.colliding(self.x, self.y, i.collision):
+                    self.destroy = True
+                    self.shake(5, 5)
 
-            if self.x > self.game.map.current_map.width or self.x < 0 - self.sprite.width:
-                self.destroy = True
-                self.shake(5, 5)
+        if self.x > self.game.map.current_map.width or self.x < 0 - self.sprite.width:
+            self.destroy = True
+            self.shake(5, 5)
 
-            if self.y > self.game.map.current_map.height or self.y < 0 - self.sprite.height:
-                self.destroy = True
-                self.shake(5, 5)
+        if self.y > self.game.map.current_map.height or self.y < 0 - self.sprite.height:
+            self.destroy = True
+            self.shake(5, 5)
 
     def shake(self, magnitude, length):
         for i in self.game.map.current_map.map_objects:

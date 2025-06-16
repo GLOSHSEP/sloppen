@@ -1,5 +1,3 @@
-add sound
-you win
 more levels
 change camera speed
 make sure every object follows the frozen and visible rules
