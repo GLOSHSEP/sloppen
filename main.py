@@ -12,7 +12,7 @@ Menu background from https://www.reddit.com/r/earthbound/comments/morrbn/i_made_
 Level background from earthbound
 Death sound from super mario world
 Dash sound effect from ultrakill
-Victory music from deltarune
+Victory and level 2 and level 3 music from deltarune
 All other music and sound effects are from undertale
 """
 
@@ -30,5 +30,6 @@ game.map.create_map_file("rooms/menu.map")
 game.map.create_map_file("rooms/done.map")
 game.map.create_map_file("rooms/level_1.map")
 game.map.create_map_file("rooms/level_2.map")
+game.map.create_map_file("rooms/level_3.map")
 game.map.switch_map("menu")
 game.game_loop()
