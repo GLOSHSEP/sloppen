@@ -1,9 +1,20 @@
 """
 Marley Ardrey
-13/06/2025
+16/06/2025
 Get David
 Get David is a game where you play as a blob named Edwin with a task to get the diabolical square David
-All instructions explained in game
+All instructions also explained in game
+Left and right to move
+Left shift + left or right to dash
+Z to shoot
+Up to jump
+Left and right against a wall + up to wall jump
+You have 3 walls jumps initially
+You have 3 gearts loose them all and you die
+Touch david to win
+Shoot enemies they have 3 health
+Touch powerups to run faster or get 6 walls jumps or shoot faster
+Going off the level will make you die
 Requires pygame install via
 pip install pygame
 pip3 install pygame

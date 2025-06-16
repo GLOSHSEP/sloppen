@@ -1,3 +1,6 @@
+"""
+note this file is only used for level building and not in the actual game and does not have error handling or anything
+"""
 tiled_map = open(input("Tiled .tmj file "), "r")
 data = tiled_map.readlines()
 tiles_start = 0
@@ -70,29 +73,33 @@ for i in range(0, len(joined_tiles)):
         else:
             wall.append('wall.wall(' + str(x) + ', ' + str(y) + ', "tiles/wall/' + str(joined_tiles[i]) + '", self.game)')
 
+file = open("wow", 'x')
+
 for i in background:
-    print(i)
+    file.write(i + '\n')
 
 for i in wall:
-    print(i)
+    file.write(i + '\n')
 
 for i in power_up:
-    print(i)
+    file.write(i + '\n')
 
 for i in enemy:
-    print(i)
+    file.write(i + '\n')
 
 for i in win:
-    print(i)
+    file.write(i + '\n')
 
 for i in player:
-    print(i)
+    file.write(i + '\n')
 
 for i in gun:
-    print(i)
+    file.write(i + '\n')
 
 for i in hud:
-    print(i)
+    file.write(i + '\n')
 
 for i in camera:
-    print(i)
+    file.write(i + '\n')
+
+file.close()

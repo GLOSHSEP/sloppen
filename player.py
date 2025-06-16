@@ -80,6 +80,17 @@ class player(sloppen.obj):
         self.flipped = False
 
     def instance_code(self):
+        #return the the menu
+        if self.game.keyboard.check_pressed("K_ESCAPE"):
+            for i in self.game.map.current_map.map_objects:
+                if i.name == "hud":
+                    i.music.stop()
+            for i in self.game.map.current_map.map_objects:
+                if i.name == "win":
+                    i.win_song.stop()
+            self.death_fx.stop()
+            self.game.screen.scale(1280, 720)
+            self.game.map.switch_map("menu")
         if self.states == self.state_lock:
             self.move()
             self.animate()
